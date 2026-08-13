@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "inicio": "Início",
+    "sobre": "Sobre",
+    "areas": "Áreas de Atuação",
+    "cursos": "Cursos",
+    "blog": "Blog",
+    "contato": "Contato",
+    "consultation": "Falar com o Dr. Fausto"
+  },
+  "practiceAreas": {
+    "eyebrow": "O que eu faço",
+    "heading": "Direito de Negócios, de ponta a ponta.",
+    "subheading": "Do desenho da estrutura societária à proteção da propriedade intelectual, do contrato à mesa de negociação coletiva — tudo para a sua operação funcionar com mais segurança e menos risco.",
+    "learnMore": "Saiba mais"
+  },
+  "faq": {
+    "eyebrow": "Dúvidas frequentes",
+    "heading": "Perguntas frequentes.",
+    "subheading": "Respostas diretas para as dúvidas mais comuns de empresários, empresas e profissionais de RH e jurídico."
+  },
+  "caseResults": {
+    "eyebrow": "Atuação em destaque",
+    "heading": "Onde a experiência vira vantagem competitiva.",
+    "disclaimer": "Cada caso é único. Esta página não promete resultados e respeita as normas de publicidade da OAB."
+  },
+  "awards": {
+    "eyebrow": "Formação & Credenciais",
+    "heading": "Uma base sólida, construída em anos de prática."
+  },
+  "cta": {
+    "heading": "Pronto para fazer negócios com mais eficiência e menos risco?",
+    "body": "Envie uma mensagem ou agende uma consulta. Vamos desenhar juntos a estratégia para o seu próximo movimento.",
+    "button": "Falar com o Dr. Fausto"
+  },
+  "secondCta": {
+    "eyebrow": "Vamos conversar",
+    "namePlaceholder": "Seu nome",
+    "phonePlaceholder": "Seu telefone / WhatsApp",
+    "situationLabel": "Conte o seu cenário",
+    "situationPlaceholder": "Descreva brevemente a sua situação...",
+    "submit": "Receber um retorno"
+  },
+  "attorneys": {
+    "eyebrow": "Equipe",
+    "heading": "Advocacia próxima e comprometida.",
+    "subheading": "Profissionais dedicados a proteger o seu negócio.",
+    "viewProfile": "Ver perfil",
+    "backToAttorneys": "← Voltar",
+    "specialties": "Áreas de atuação",
+    "barMemberships": "Inscrição profissional",
+    "education": "Formação"
+  },
+  "blog": {
+    "eyebrow": "Conteúdos",
+    "heading": "Conteúdo prático para fazer negócios com menos risco.",
+    "subheading": "Artigos, análises e guias de Direito de Negócios, sem juridiquês — direto ao que você precisa para decidir melhor.",
+    "readMore": "Ler artigo",
+    "backToBlog": "← Voltar ao blog",
+    "publishedOn": "Publicado em",
+    "noPosts": "Nenhum artigo publicado ainda. Volte em breve."
+  },
+  "practiceAreaPage": {
+    "backToAreas": "← Todas as áreas de atuação",
+    "consultationCta": "Agendar uma consulta"
+  },
+  "cookie": {
+    "message": "Usamos cookies para melhorar sua experiência e analisar o tráfego do site.",
+    "learnMore": "Saiba mais",
+    "acceptAll": "Aceitar todos",
+    "essentialOnly": "Somente essenciais"
+  },
+  "footer": {
+    "practiceAreas": "Áreas de atuação",
+    "contact": "Contato",
+    "officeHours": "Atendimento"
+  }
+}
