@@ -3,12 +3,10 @@ import type { SiteData } from '@/types'
 
 interface HeroProps {
   hero: SiteData['hero']
-  phone: string
+  phone?: string
 }
 
-export default function Hero({ hero, phone }: HeroProps) {
-  const phoneHref = `tel:${phone.replace(/\D/g, '')}`
-
+export default function Hero({ hero }: HeroProps) {
   return (
     <section
       id="home"
@@ -34,10 +32,12 @@ export default function Hero({ hero, phone }: HeroProps) {
               Falar com o Dr. Fausto
             </a>
             <a
-              href={phoneHref}
+              href="https://wa.me/5531984284815"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center min-h-[48px] px-6 rounded-full border border-white/60 text-white font-extrabold hover:text-gold-light hover:border-gold-light transition-colors"
             >
-              Ligar {phone}
+              Falar no WhatsApp
             </a>
           </div>
 
@@ -62,13 +62,17 @@ export default function Hero({ hero, phone }: HeroProps) {
         </aside>
       </div>
 
-      {/* Mobile sticky call button */}
+      {/* Mobile sticky WhatsApp button — hidden per request; re-enable when needed */}
+      {/*
       <a
-        href={phoneHref}
+        href="https://wa.me/5531984284815"
+        target="_blank"
+        rel="noopener noreferrer"
         className="md:hidden fixed left-1/2 -translate-x-1/2 bottom-4 z-40 flex items-center justify-center w-[min(92%,420px)] min-h-[48px] rounded-full bg-gold text-gray-900 font-black shadow-heavy"
       >
-        Ligar {phone}
+        Falar no WhatsApp
       </a>
+      */}
     </section>
   )
 }

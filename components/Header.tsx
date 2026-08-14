@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 interface HeaderProps {
   name: string
   tagline: string
-  phone: string
+  phone?: string
   locale?: string
 }
 
@@ -20,23 +20,15 @@ const navLinks = [
   { href: '/contato', label: 'Contato' },
 ]
 
-export default function Header({ name, tagline, phone }: HeaderProps) {
+export default function Header({ name, tagline }: HeaderProps) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-  const phoneHref = `tel:${phone.replace(/\D/g, '')}`
   const isHome = pathname === '/'
 
   const closeMenu = useCallback(() => setMenuOpen(false), [])
 
   return (
     <>
-      <div className="bg-navy-dark text-white text-sm py-2">
-        <div className="container-fw flex flex-wrap justify-between gap-2">
-          <span>Direito de Negócios · Belo Horizonte/MG · Atuação nacional</span>
-          <a href={phoneHref} className="text-gold-light font-bold">{phone}</a>
-        </div>
-      </div>
-
       <header id="site-header" className="sticky top-0 z-50 bg-navy/95 backdrop-blur-sm text-white border-b border-white/10">
         <div className="container-fw flex items-center justify-between gap-4 min-h-[72px]">
           <Link href="/" aria-label="Início" className="flex flex-col leading-tight shrink-0">
