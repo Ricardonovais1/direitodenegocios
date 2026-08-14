@@ -6,7 +6,7 @@ Production-ready law firm website template built with Next.js 15, Sanity CMS, an
 
 ## Features
 
-- **Sanity CMS backend** — manage all site content from a visual Studio at `/studio` (no code required after setup)
+- **Sanity CMS backend** — manage all site content from a standalone Studio deployed to `*.sanity.studio` (no code required after setup)
 - **Multi-language** — English and Spanish out of the box via next-intl; add more locales by extending `messages/`
 - **Contact forms** — server-validated (Zod) and delivered via Resend; runs in demo mode without credentials
 - **Analytics** — GA4 via `@next/third-parties`, consent-gated (does not fire until cookie banner is accepted)
@@ -53,7 +53,6 @@ lawfirm-startup-template/
 │   │   ├── blog/              # Blog listing + post pages
 │   │   └── practice-areas/    # Individual practice area pages
 │   ├── api/contact/           # POST handler — Zod + Resend
-│   ├── studio/                # Sanity Studio (outside locale routing)
 │   ├── globals.css
 │   ├── sitemap.ts
 │   └── robots.ts
@@ -64,7 +63,7 @@ lawfirm-startup-template/
 ├── sanity/                    # Client, queries, schemas
 ├── types/                     # Shared TypeScript types
 ├── middleware.ts              # next-intl locale routing middleware
-├── sanity.config.ts           # Sanity Studio configuration
+├── sanity.config.ts           # Sanity Studio configuration (deployed standalone via `sanity deploy`)
 ├── next.config.ts
 ├── tailwind.config.ts
 └── .env.local.example
@@ -122,14 +121,14 @@ npm run dev
 ```
 
 - Site: `http://localhost:3000`
-- Spanish: `http://localhost:3000/es`
-- CMS Studio: `http://localhost:3000/studio`
+
+The Sanity Studio runs standalone (not part of this Next.js app). Deploy it with `npx sanity deploy` to get a free `https://<your-slug>.sanity.studio` URL.
 
 ---
 
 ## CMS: Managing Content
 
-Once Sanity is connected, visit `/studio` to manage:
+Once Sanity is connected, visit your deployed `*.sanity.studio` URL to manage:
 
 | Schema | What it controls |
 |---|---|

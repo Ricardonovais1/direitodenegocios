@@ -29,11 +29,29 @@ export async function generateMetadata({
 
   if (!post) return {}
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ''
+  const metaTitle = post.seo?.title ?? post.title
+  const metaDescription = post.seo?.description ?? post.excerpt
+  const ogImageSource = post.seo?.ogImage ?? post.coverImage
+  const ogImageUrl = ogImageSource ? urlFor(ogImageSource)?.width(1200).height(630).fit('crop').url() : undefined
+
   return {
-    title: post.seo?.title ?? post.title,
-    description: post.seo?.description ?? post.excerpt,
+    title: metaTitle,
+    description: metaDescription,
     alternates: { canonical: `${siteUrl}/blog/${slug}` },
-    openGraph: { title: post.title, description: post.excerpt ?? undefined, type: 'article', publishedTime: post.publishedAt },
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription ?? undefined,
+      type: 'article',
+      publishedTime: post.publishedAt,
+      url: `${siteUrl}/blog/${slug}`,
+      images: ogImageUrl ? [{ url: ogImageUrl, width: 1200, height: 630, alt: post.title }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: metaTitle,
+      description: metaDescription ?? undefined,
+      images: ogImageUrl ? [ogImageUrl] : undefined,
+    },
   }
 }
 

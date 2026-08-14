@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Fraunces, Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -7,6 +8,20 @@ import Analytics from '@/components/Analytics'
 import CookieConsent from '@/components/CookieConsent'
 import LiveChat from '@/components/LiveChat'
 import '../globals.css'
+
+const fontHeading = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-heading',
+  weight: ['500', '600', '700'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+})
+
+const fontBody = Inter({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+})
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://faustosettecamara.com.br'
 
@@ -49,7 +64,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${fontHeading.variable} ${fontBody.variable}`}>
       <body>
         <a
           href="#main-content"

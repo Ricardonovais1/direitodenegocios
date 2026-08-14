@@ -61,11 +61,8 @@ This project uses both server-side and client-side environment variables. Unders
 - **Add rate limiting** before production deployment (e.g., Upstash Rate Limit or Vercel Edge middleware)
 - Consider adding a CAPTCHA (hCaptcha, Cloudflare Turnstile) to prevent spam
 
-### Sanity CMS (`/studio`)
-- Studio is accessible at `/studio` — **restrict access in production** via:
-  - Sanity's built-in user management (invite-only)
-  - Vercel password protection on the `/studio` path
-  - Middleware-level auth check if self-hosted
+### Sanity CMS (standalone Studio)
+- Studio is deployed standalone to `*.sanity.studio` (not part of the Next.js app) — access is restricted via Sanity's built-in project member management (invite-only by default)
 - The `SANITY_API_READ_TOKEN` should have **read-only** permissions; write operations go through the authenticated Studio UI
 - Review your Sanity project's **CORS settings** to allow only your deployed domain
 

@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@sanity/vision": "^3.75.0",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
