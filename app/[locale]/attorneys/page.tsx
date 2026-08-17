@@ -61,7 +61,7 @@ export default async function AttorneysPage({
                 <Link
                   key={attorney._id}
                   href={`/${locale}/attorneys/${attorney.slug}`}
-                  className="group block bg-white rounded-[18px] overflow-hidden border border-[#ececec] shadow-card hover:shadow-heavy hover:-translate-y-1 transition-all"
+                  className="group block bg-white rounded-[20px] overflow-hidden border border-[#ececec] shadow-card hover:shadow-heavy hover:-translate-y-1 transition-all"
                 >
                   <div className="relative h-64 bg-gradient-to-br from-navy to-navy-soft">
                     {photoUrl ? (

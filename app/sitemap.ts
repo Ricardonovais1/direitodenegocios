@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { sanityClient } from '@/sanity/client'
 import { allSlugsQuery } from '@/sanity/queries'
+import { fallbackData } from '@/lib/fallback-data'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://faustosettecamara.com.br'
@@ -32,7 +33,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const { route, priority } of staticRoutes) {
     entries.push({ url: `${baseUrl}${route}`, lastModified: new Date(), changeFrequency: 'weekly', priority })
   }
-  for (const { slug } of slugs.practiceAreas) {
+  // Se o Sanity não responder, as áreas do fallback ainda precisam ser indexadas —
+  // elas têm página estática gerada de qualquer forma.
+  const areaSlugs = new Set<string>(
+    slugs.practiceAreas.length
+      ? slugs.practiceAreas.map(({ slug }) => slug)
+      : fallbackData.practiceAreas.flatMap(({ slug }) => (slug ? [slug] : [])),
+  )
+
+  for (const slug of areaSlugs) {
     entries.push({ url: `${baseUrl}/areas-de-atuacao/${slug}`, changeFrequency: 'monthly', priority: 0.7 })
   }
   for (const { slug } of slugs.attorneys) {

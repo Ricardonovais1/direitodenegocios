@@ -65,7 +65,7 @@ export default async function AttorneyPage({
           <div className="grid md:grid-cols-[340px_1fr] gap-12 mt-6">
             {/* Photo column */}
             <div>
-              <div className="relative h-[420px] md:h-[520px] rounded-[24px] overflow-hidden bg-gradient-to-br from-navy to-navy-soft shadow-heavy">
+              <div className="relative h-[420px] md:h-[520px] rounded-[20px] overflow-hidden bg-gradient-to-br from-navy to-navy-soft shadow-heavy">
                 {photoUrl ? (
                   <Image src={photoUrl} alt={attorney.name} fill className="object-cover" />
                 ) : (
@@ -76,7 +76,7 @@ export default async function AttorneyPage({
               </div>
 
               {/* Contact card */}
-              <div className="mt-6 bg-white rounded-[18px] p-6 border border-[#ececec] shadow-card">
+              <div className="mt-6 bg-white rounded-[20px] p-6 border border-[#ececec] shadow-card">
                 {attorney.email && (
                   <a href={`mailto:${attorney.email}`} className="flex items-center gap-3 text-navy hover:text-gold transition-colors mb-3">
                     <span className="text-gold">✉</span>

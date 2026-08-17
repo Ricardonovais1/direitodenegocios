@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { getSiteData } from '@/lib/site-data'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
+import AreaMarquee from '@/components/AreaMarquee'
 import PracticeAreas from '@/components/PracticeAreas'
 import About from '@/components/About'
 import Stats from '@/components/Stats'
@@ -13,14 +15,32 @@ import FAQ from '@/components/FAQ'
 import SecondCTA from '@/components/SecondCTA'
 import CourseBanner from '@/components/CourseBanner'
 import Footer from '@/components/Footer'
+import Reveal from '@/components/motion/Reveal'
+import SpotlightCard from '@/components/motion/SpotlightCard'
+import BackToTop from '@/components/motion/BackToTop'
 import { getTranslations } from 'next-intl/server'
 
 const audience = [
-  { title: 'Empresas de tecnologia e TI', description: 'Que vivem sob convenções coletivas e contratos de alta complexidade.' },
-  { title: 'Startups e fundadores', description: 'Que precisam de estrutura jurídica do primeiro aporte à escala.' },
-  { title: 'Empresários e investidores', description: 'Que querem crescer sem transformar risco em surpresa.' },
-  { title: 'Departamentos jurídicos e RH', description: 'Que aplicam normas coletivas no dia a dia e precisam de segurança.' },
-  { title: 'Profissionais e cidadãos', description: 'Que precisam de um caminho claro em meio à burocracia.' },
+  {
+    title: 'Empresas de tecnologia e TI',
+    description: 'Que vivem sob convenções coletivas e contratos de alta complexidade.',
+  },
+  {
+    title: 'Startups e fundadores',
+    description: 'Que precisam de estrutura jurídica do primeiro aporte à escala.',
+  },
+  {
+    title: 'Empresários e investidores',
+    description: 'Que querem crescer sem transformar risco em surpresa.',
+  },
+  {
+    title: 'Departamentos jurídicos e RH',
+    description: 'Que aplicam normas coletivas no dia a dia e precisam de segurança.',
+  },
+  {
+    title: 'Profissionais e cidadãos',
+    description: 'Que precisam de um caminho claro em meio à burocracia.',
+  },
 ]
 
 export async function generateMetadata({
@@ -71,7 +91,7 @@ export default async function HomePage({
     },
     url: siteUrl,
     areaServed: 'BR',
-    knowsAbout: data.practiceAreas.map((a) => a.title),
+    knowsAbout: data.practiceAreas.map((area) => area.title),
   }
 
   return (
@@ -81,25 +101,67 @@ export default async function HomePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Header name={data.name} tagline={data.tagline} phone={data.phone} locale={locale} />
+
       <main id="main-content">
-        <Hero hero={data.hero} phone={data.phone} />
+        <Hero
+          hero={data.hero}
+          phone={data.phone}
+          pillars={data.about.features.map((feature) => feature.title)}
+        />
+        <AreaMarquee areas={data.practiceAreas} />
         <About about={data.about} />
         <PracticeAreas areas={data.practiceAreas} locale={locale} />
         <Stats stats={data.stats} />
 
-        <section className="py-20 bg-offwhite">
+        {/* Para quem eu trabalho */}
+        <section className="bg-white py-24">
           <div className="container-fw">
-            <div className="max-w-2xl mb-10">
-              <p className="text-gold uppercase tracking-widest text-xs font-black mb-3">Para quem eu trabalho</p>
-              <h2 className="font-serif text-navy text-4xl md:text-5xl font-bold leading-tight">Para quem faz negócios de verdade.</h2>
+            <div className="mb-12 max-w-2xl">
+              <Reveal variant="up">
+                <p className="eyebrow mb-4">Para quem eu trabalho</p>
+              </Reveal>
+              <Reveal variant="up" delay={80}>
+                <h2 className="font-serif text-[2rem] font-bold leading-[1.06] text-navy md:text-[2.75rem]">
+                  Para quem faz negócios de verdade.
+                </h2>
+              </Reveal>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {audience.map((item) => (
-                <div key={item.title} className="bg-white rounded-[18px] p-6 border border-[#ececec] shadow-card">
-                  <h3 className="font-serif text-navy text-lg font-bold mb-2">{item.title}</h3>
-                  <p className="text-muted text-sm">{item.description}</p>
-                </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {audience.map((item, index) => (
+                <SpotlightCard
+                  key={item.title}
+                  delay={(index % 3) * 90}
+                  className="card-elevated card-topline p-7"
+                >
+                  <h3 className="mb-2 font-serif text-lg font-bold text-navy">{item.title}</h3>
+                  <p className="text-sm text-muted">{item.description}</p>
+                </SpotlightCard>
               ))}
+
+              <SpotlightCard
+                dark
+                delay={180}
+                className="bg-ink texture-grain relative flex flex-col justify-between overflow-hidden rounded-[20px] p-7 text-white transition-transform duration-600 ease-silk hover:-translate-y-1.5"
+              >
+                <div className="relative">
+                  <h3 className="mb-2 font-serif text-lg font-bold text-gold-light">
+                    É o seu caso?
+                  </h3>
+                  <p className="text-sm text-slate-300">
+                    Se você não se encaixou em nenhum, provavelmente ainda assim eu consigo ajudar.
+                  </p>
+                </div>
+                <Link
+                  href="/contato"
+                  className="link-underline relative mt-6 text-sm font-bold text-gold-light"
+                >
+                  Vamos descobrir juntos
+                  <span aria-hidden className="arrow-slide">
+                    →
+                  </span>
+                </Link>
+              </SpotlightCard>
             </div>
           </div>
         </section>
@@ -109,32 +171,51 @@ export default async function HomePage({
         {data.caseResults && data.caseResults.length > 0 && (
           <CaseResults results={data.caseResults} />
         )}
+
         <Process steps={data.process} />
-        {data.awards && data.awards.length > 0 && (
-          <Awards awards={data.awards} />
-        )}
-        {data.courses && data.courses[0] && (
-          <CourseBanner course={data.courses[0]} />
-        )}
+
+        {data.awards && data.awards.length > 0 && <Awards awards={data.awards} />}
+        {data.courses && data.courses[0] && <CourseBanner course={data.courses[0]} />}
+
         <FAQ faqs={data.faqs} />
         {data.secondCta && <SecondCTA secondCta={data.secondCta} />}
 
-        <section className="py-20 text-center text-white bg-navy-dark relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,164,92,0.2),transparent_50%)]" />
+        {/* Fechamento */}
+        <section className="bg-ink texture-grain relative overflow-hidden py-24 text-center text-white">
+          <div aria-hidden className="texture-weave-dark absolute inset-0" />
+          <div
+            aria-hidden
+            className="aurora left-[calc(50%-190px)] top-0 h-[380px] w-[380px] bg-gold/20"
+          />
           <div className="container-fw relative">
-            <h2 className="font-serif text-4xl md:text-5xl font-bold leading-tight max-w-3xl mx-auto mb-4">
-              {t('heading')}
-            </h2>
-            <p className="text-slate-300 max-w-xl mx-auto mb-8">{t('body')}</p>
-            <a
-              href="/contato"
-              className="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-full bg-gold text-gray-900 font-extrabold hover:bg-gold-light transition-colors"
-            >
-              {t('button')}
-            </a>
+            <Reveal variant="up">
+              <h2 className="mx-auto mb-4 max-w-3xl font-serif text-[2rem] font-bold leading-[1.06] md:text-[2.75rem]">
+                {t('heading')}
+              </h2>
+            </Reveal>
+            <Reveal variant="up" delay={90}>
+              <p className="mx-auto mb-9 max-w-xl text-slate-300">{t('body')}</p>
+            </Reveal>
+            <Reveal variant="up" delay={170}>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link href="/contato" className="btn-gold">
+                  {t('button')}
+                </Link>
+                <a
+                  href="https://wa.me/5531984284815"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                >
+                  Falar no WhatsApp
+                </a>
+              </div>
+            </Reveal>
           </div>
         </section>
       </main>
+
+      <BackToTop />
       <Footer data={data} locale={locale} />
     </>
   )

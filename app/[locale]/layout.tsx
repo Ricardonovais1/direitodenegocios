@@ -65,10 +65,19 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={`${fontHeading.variable} ${fontBody.variable}`}>
+      <head>
+        {/* Sem JS as animações de entrada não disparam — o conteúdo precisa
+            aparecer mesmo assim. */}
+        <noscript>
+          <style>{`.reveal,.clip-reveal{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}[id*="-panel-"]{grid-template-rows:1fr!important}[id*="-panel-"]>*{overflow:visible!important}`}</style>
+        </noscript>
+      </head>
       <body>
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:z-50 focus:bg-gold focus:text-gray-900 focus:font-bold focus:px-5 focus:py-3 focus:rounded-br-lg"
+          // z-[100]: o header é sticky z-50 e vem depois no DOM — com o mesmo
+          // z-index ele cobriria o skip link.
+          className="sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:z-[100] focus:bg-gold focus:text-navy-deep focus:font-bold focus:px-5 focus:py-3 focus:rounded-br-lg"
         >
           Pular para o conteúdo principal
         </a>

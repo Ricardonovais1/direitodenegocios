@@ -1,32 +1,54 @@
 import { getTranslations } from 'next-intl/server'
+import Link from 'next/link'
+import Accordion from './motion/Accordion'
+import Reveal from './motion/Reveal'
 import type { FAQ as FAQItem } from '@/types'
 
 export default async function FAQ({ faqs }: { faqs: FAQItem[] }) {
   const t = await getTranslations('faq')
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+    })),
+  }
+
   return (
-    <section id="faq" className="py-20">
-      <div className="container-fw">
-        <div className="max-w-2xl mb-10">
-          <p className="text-gold uppercase tracking-widest text-xs font-black mb-3">{t('eyebrow')}</p>
-          <h2 className="font-serif text-navy text-4xl md:text-5xl font-bold leading-tight mb-4">{t('heading')}</h2>
-          <p className="text-muted text-lg">{t('subheading')}</p>
+    <section id="faq" className="relative bg-white py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container-fw grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <Reveal variant="up">
+            <p className="eyebrow mb-4">{t('eyebrow')}</p>
+          </Reveal>
+          <Reveal variant="up" delay={80}>
+            <h2 className="mb-4 font-serif text-[2rem] font-bold leading-[1.06] text-navy md:text-[2.75rem]">
+              {t('heading')}
+            </h2>
+          </Reveal>
+          <Reveal variant="up" delay={150}>
+            <p className="mb-8 text-lg text-muted">{t('subheading')}</p>
+          </Reveal>
+          <Reveal variant="up" delay={220}>
+            <Link href="/contato" className="link-underline text-sm font-bold text-navy hover:text-gold-ink">
+              Sua dúvida não está aqui? Fale comigo
+              <span aria-hidden className="arrow-slide">
+                →
+              </span>
+            </Link>
+          </Reveal>
         </div>
 
-        <div className="grid gap-3 max-w-3xl">
-          {faqs.map((faq) => (
-            <details
-              key={faq._id}
-              className="group bg-white rounded-2xl px-6 py-5 border border-[#ececec] open:shadow-card"
-            >
-              <summary className="cursor-pointer text-navy font-black list-none flex justify-between items-center gap-4">
-                {faq.question}
-                <span className="shrink-0 text-gold text-xl leading-none group-open:rotate-45 transition-transform">+</span>
-              </summary>
-              <p className="text-muted mt-4">{faq.answer}</p>
-            </details>
-          ))}
-        </div>
+        <Reveal variant="up" delay={120}>
+          <Accordion items={faqs.map((faq) => ({ id: faq._id, question: faq.question, answer: faq.answer }))} />
+        </Reveal>
       </div>
     </section>
   )

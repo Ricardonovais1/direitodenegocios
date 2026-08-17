@@ -1,33 +1,58 @@
 import { getTranslations } from 'next-intl/server'
+import Reveal from './motion/Reveal'
+import SpotlightCard from './motion/SpotlightCard'
 import type { CaseResult } from '@/types'
 
 export default async function CaseResults({ results }: { results: CaseResult[] }) {
   const t = await getTranslations('caseResults')
 
   return (
-    <section className="py-20 bg-navy">
-      <div className="container-fw">
-        <div className="max-w-2xl mb-10">
-          <p className="text-gold uppercase tracking-widest text-xs font-black mb-3">{t('eyebrow')}</p>
-          <h2 className="font-serif text-white text-4xl md:text-5xl font-bold leading-tight">
-            {t('heading')}
-          </h2>
+    <section className="bg-ink texture-grain relative overflow-hidden py-24">
+      <div aria-hidden className="texture-weave-dark absolute inset-0" />
+      <div
+        aria-hidden
+        className="aurora -left-32 top-1/4 h-[360px] w-[360px] bg-gold/10"
+        style={{ animationDelay: '-14s' }}
+      />
+
+      <div className="container-fw relative">
+        <div className="mb-12 max-w-2xl">
+          <Reveal variant="up">
+            <p className="eyebrow mb-4">{t('eyebrow')}</p>
+          </Reveal>
+          <Reveal variant="up" delay={80}>
+            <h2 className="font-serif text-[2rem] font-bold leading-[1.06] text-white md:text-[2.75rem]">
+              {t('heading')}
+            </h2>
+          </Reveal>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-          {results.map((r) => (
-            <div
-              key={r._id}
-              className="bg-navy-soft rounded-[18px] p-6 border border-white/10 hover:border-gold/40 transition-colors"
+        <div className="mb-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {results.map((result, index) => (
+            <SpotlightCard
+              key={result._id}
+              dark
+              delay={(index % 3) * 90}
+              className="group relative overflow-hidden rounded-[20px] border border-white/10 bg-white/[0.04] p-7 transition-[border-color,transform,background-color] duration-600 ease-silk hover:-translate-y-1.5 hover:border-gold/40 hover:bg-white/[0.07]"
             >
-              <p className="font-serif text-gold-light text-3xl font-bold mb-2">{r.highlight}</p>
-              <p className="text-white font-bold mb-2">{r.label}</p>
-              {r.description && <p className="text-slate-400 text-sm">{r.description}</p>}
-            </div>
+              <p className="mb-2 font-serif text-[1.7rem] font-bold leading-tight text-gold-light">
+                {result.highlight}
+              </p>
+              <p className="mb-2 font-bold text-white">{result.label}</p>
+              {result.description && (
+                <p className="text-sm text-slate-400">{result.description}</p>
+              )}
+              <span
+                aria-hidden
+                className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-gradient-to-r from-gold to-transparent transition-transform duration-700 ease-silk group-hover:scale-x-100"
+              />
+            </SpotlightCard>
           ))}
         </div>
 
-        <p className="text-slate-500 text-xs">{t('disclaimer')}</p>
+        <Reveal variant="fade">
+          <p className="text-xs text-slate-400">{t("disclaimer")}</p>
+        </Reveal>
       </div>
     </section>
   )

@@ -3,6 +3,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import Enter from '@/components/motion/Enter'
+import Reveal from '@/components/motion/Reveal'
+import SpotlightCard from '@/components/motion/SpotlightCard'
+import BackToTop from '@/components/motion/BackToTop'
 import { getSiteData } from '@/lib/site-data'
 
 export async function generateMetadata({
@@ -13,7 +17,8 @@ export async function generateMetadata({
   await params
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? ''
   return {
-    title: 'Sobre — Fausto Sette Câmara',
+    // O sufixo "| Fausto Sette Câmara" vem do template em [locale]/layout.tsx.
+    title: 'Sobre',
     description:
       'Conheça a trajetória de Fausto Sette Câmara: UFMG, 15+ anos de advocacia empresarial e quase 10 anos de negociação sindical à frente do Sindinfor/MG.',
     alternates: { canonical: `${siteUrl}/sobre` },
@@ -29,7 +34,8 @@ const timeline = [
   {
     period: '2008',
     title: 'Graduação em Direito — UFMG',
-    description: 'Monografia em Direito Tributário: “Direito Tributário à Luz do Princípio do Poluidor Pagador”.',
+    description:
+      'Monografia em Direito Tributário: “Direito Tributário à Luz do Princípio do Poluidor Pagador”.',
   },
   {
     period: '2009',
@@ -54,11 +60,26 @@ const timeline = [
 ]
 
 const reasons = [
-  { title: 'Visão de negócio, não só jurídica', description: 'Falo a língua do empresário, não o juridiquês do cartório.' },
-  { title: 'Experiência de trincheira', description: 'Fui oficial de justiça antes de advogar; conheço o sistema por dentro.' },
-  { title: 'Vivência sindical real', description: 'Quase 10 anos negociando convenções coletivas de TI na prática.' },
-  { title: 'Atendimento direto e claro', description: 'Você entende o risco, o caminho e a decisão.' },
-  { title: 'Estratégia, tática e leitura de jogo', description: 'O tripé que transforma Direito em vantagem competitiva.' },
+  {
+    title: 'Visão de negócio, não só jurídica',
+    description: 'Falo a língua do empresário, não o juridiquês do cartório.',
+  },
+  {
+    title: 'Experiência de trincheira',
+    description: 'Fui oficial de justiça antes de advogar; conheço o sistema por dentro.',
+  },
+  {
+    title: 'Vivência sindical real',
+    description: 'Quase 10 anos negociando convenções coletivas de TI na prática.',
+  },
+  {
+    title: 'Atendimento direto e claro',
+    description: 'Você entende o risco, o caminho e a decisão.',
+  },
+  {
+    title: 'Estratégia, tática e leitura de jogo',
+    description: 'O tripé que transforma Direito em vantagem competitiva.',
+  },
 ]
 
 export default async function SobrePage({
@@ -72,112 +93,212 @@ export default async function SobrePage({
   return (
     <>
       <Header name={data.name} tagline={data.tagline} phone={data.phone} locale={locale} />
+
       <main id="main-content">
-        {/* Hero */}
-        <div
-          className="py-20 text-white relative overflow-hidden"
-          style={{ background: 'linear-gradient(110deg, rgba(9,20,34,0.96), rgba(15,31,51,0.86)), #0f1f33' }}
-        >
-          <div className="container-fw max-w-3xl">
-            <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-gold/40 mb-6">
-              <Image src="/images/fausto.webp" alt="Fausto Sette Câmara" fill sizes="144px" className="object-cover" />
+        {/* Abertura */}
+        <div className="bg-ink texture-grain relative overflow-hidden py-20 text-white md:py-28">
+          <div aria-hidden className="texture-weave-dark absolute inset-0" />
+          <div aria-hidden className="aurora -right-20 -top-24 h-[400px] w-[400px] bg-gold/15" />
+
+          <div className="container-fw relative grid items-center gap-12 md:grid-cols-[0.4fr_0.6fr]">
+            <Enter variant="scale" className="relative mx-auto w-fit md:mx-0">
+              <span aria-hidden className="absolute -inset-3 rounded-full border border-gold/30" />
+              <div className="relative h-40 w-40 overflow-hidden rounded-full border-2 border-gold/50 md:h-56 md:w-56">
+                <Image
+                  src="/images/fausto.webp"
+                  alt="Retrato de Fausto Sette Câmara"
+                  fill
+                  sizes="224px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </Enter>
+
+            <div>
+              <Enter>
+                <p className="eyebrow mb-5 !text-gold-light">Sobre mim</p>
+              </Enter>
+              <Enter variant="blur" delay={70}>
+                <h1 className="mb-5 font-serif text-[2.4rem] font-bold leading-[1.06] md:text-[3.4rem]">
+                  Eu entendo o sistema. E te ajudo a vencê-lo.
+                </h1>
+              </Enter>
+              <Enter delay={140}>
+                <p className="max-w-xl text-lg text-slate-300">
+                  Mais de 15 anos dentro da advocacia empresarial e de negócios, aprendendo — na
+                  prática — o que funciona, o que trava e o que faz a diferença.
+                </p>
+              </Enter>
             </div>
-            <p className="text-gold uppercase tracking-widest text-xs font-black mb-4">Sobre mim</p>
-            <h1 className="font-serif text-4xl md:text-6xl font-bold leading-tight mb-4">
-              Eu entendo o sistema. E te ajudo a vencê-lo.
-            </h1>
-            <p className="text-slate-300 text-lg">
-              Mais de 15 anos dentro da advocacia empresarial e de negócios, aprendendo — na prática — o que funciona, o que trava e o que faz a diferença.
-            </p>
           </div>
         </div>
 
         {/* A história */}
-        <section className="py-20">
+        <section className="bg-white py-20 md:py-24">
           <div className="container-fw max-w-3xl">
-            <p className="text-gold uppercase tracking-widest text-xs font-black mb-3">A história</p>
-            <div className="space-y-5 text-lg text-[#1f2933] leading-relaxed">
-              <p>
-                O Direito de Negócios nasceu da experiência de mais de 15 anos com a advocacia empresarial e de negócios. Depois de labutar muito nessa área — ajudando empresas, empresários e cidadãos a navegar nas tortuosas águas brasileiras —, entendi uma coisa que nenhum banco de faculdade ensina:
-              </p>
-              <p className="font-serif text-navy text-2xl font-bold">Nem sempre conhecimento técnico é o que basta.</p>
-              <p>
-                É preciso de <strong>estratégia</strong> (o plano de longo prazo), <strong>tática</strong> (o como fazer no curto prazo) e <strong>leitura de jogo</strong> (a capacidade de superar os entraves que o sistema brasileiro organiza, em forma de ineficiência, em favor do estado).
-              </p>
-              <p>
-                Minha missão é ajudar empresas, empresários, cidadãos e profissionais a fazer negócios com mais eficiência e menor risco.
-              </p>
-              <p>
-                Este projeto nasce da pretensão de transformar essa luta inglória contra um sistema caótico em uma <strong>jornada palatável e vitoriosa</strong> — entregando às pessoas o conhecimento e os caminhos que a experiência me ensinou.
-              </p>
+            <Reveal variant="up">
+              <p className="eyebrow mb-6">A história</p>
+            </Reveal>
+
+            <div className="space-y-6 text-lg leading-relaxed text-[#1f2933]">
+              <Reveal variant="up" delay={60}>
+                <p>
+                  O Direito de Negócios nasceu da experiência de mais de 15 anos com a advocacia
+                  empresarial e de negócios. Depois de labutar muito nessa área — ajudando empresas,
+                  empresários e cidadãos a navegar nas tortuosas águas brasileiras —, entendi uma
+                  coisa que nenhum banco de faculdade ensina:
+                </p>
+              </Reveal>
+
+              <Reveal variant="up" delay={120}>
+                <p className="border-l-2 border-gold py-2 pl-6 font-serif text-2xl font-bold leading-snug text-navy md:text-[2rem]">
+                  Nem sempre conhecimento técnico é o que basta.
+                </p>
+              </Reveal>
+
+              <Reveal variant="up" delay={180}>
+                <p>
+                  É preciso de <strong>estratégia</strong> (o plano de longo prazo),{' '}
+                  <strong>tática</strong> (o como fazer no curto prazo) e{' '}
+                  <strong>leitura de jogo</strong> (a capacidade de superar os entraves que o sistema
+                  brasileiro organiza, em forma de ineficiência, em favor do estado).
+                </p>
+              </Reveal>
+
+              <Reveal variant="up" delay={230}>
+                <p>
+                  Minha missão é ajudar empresas, empresários, cidadãos e profissionais a fazer
+                  negócios com mais eficiência e menor risco.
+                </p>
+              </Reveal>
+
+              <Reveal variant="up" delay={280}>
+                <p>
+                  Este projeto nasce da pretensão de transformar essa luta inglória contra um sistema
+                  caótico em uma <strong>jornada palatável e vitoriosa</strong> — entregando às
+                  pessoas o conhecimento e os caminhos que a experiência me ensinou.
+                </p>
+              </Reveal>
             </div>
           </div>
         </section>
 
-        {/* Trajetória */}
-        <section className="py-20 bg-offwhite">
-          <div className="container-fw">
-            <div className="max-w-2xl mb-10">
-              <p className="text-gold uppercase tracking-widest text-xs font-black mb-3">Trajetória</p>
-              <h2 className="font-serif text-navy text-4xl md:text-5xl font-bold leading-tight">Do TJMG à mesa de negociação.</h2>
+        {/* Trajetória — linha do tempo */}
+        <section className="bg-parchment texture-grain texture-grain-light relative py-20 md:py-24">
+          <div className="container-fw relative">
+            <div className="mb-14 max-w-2xl">
+              <Reveal variant="up">
+                <p className="eyebrow mb-4">Trajetória</p>
+              </Reveal>
+              <Reveal variant="up" delay={80}>
+                <h2 className="font-serif text-[2rem] font-bold leading-[1.06] text-navy md:text-[2.75rem]">
+                  Do TJMG à mesa de negociação.
+                </h2>
+              </Reveal>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {timeline.map((item) => (
-                <div key={item.period} className="bg-white rounded-[18px] p-6 border-t-4 border-gold shadow-card">
-                  <p className="text-gold font-black text-sm uppercase tracking-wider mb-2">{item.period}</p>
-                  <h3 className="font-serif text-navy text-lg font-bold mb-2">{item.title}</h3>
-                  <p className="text-muted text-sm">{item.description}</p>
-                </div>
+
+            <ol className="relative ml-1 border-l border-gold/25 pl-8 md:ml-4 md:pl-12">
+              {timeline.map((item, index) => (
+                <Reveal
+                  key={item.period}
+                  as="li"
+                  variant="up"
+                  // Escalonamento curto: em listas longas, esperar 6 passos
+                  // deixaria a página vazia para quem rola rápido.
+                  delay={Math.min(index, 3) * 70}
+                  className="group relative pb-10 last:pb-0"
+                >
+                  <span
+                    aria-hidden
+                    className="absolute left-[calc(-2rem-5px)] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-gold bg-parchment transition-all duration-600 ease-silk group-hover:scale-150 group-hover:bg-gold md:left-[calc(-3rem-5px)]"
+                  />
+                  <p className="mb-1.5 text-xs font-black uppercase tracking-[0.18em] text-gold-ink">
+                    {item.period}
+                  </p>
+                  <h3 className="mb-1.5 font-serif text-xl font-bold text-navy">{item.title}</h3>
+                  <p className="max-w-xl text-muted">{item.description}</p>
+                </Reveal>
               ))}
-            </div>
+            </ol>
           </div>
         </section>
 
         {/* Por que eu */}
-        <section className="py-20">
+        <section className="bg-white py-20 md:py-24">
           <div className="container-fw">
-            <div className="max-w-2xl mb-10">
-              <p className="text-gold uppercase tracking-widest text-xs font-black mb-3">Por que eu</p>
-              <h2 className="font-serif text-navy text-4xl md:text-5xl font-bold leading-tight">O que você leva ao trabalhar comigo.</h2>
+            <div className="mb-12 max-w-2xl">
+              <Reveal variant="up">
+                <p className="eyebrow mb-4">Por que eu</p>
+              </Reveal>
+              <Reveal variant="up" delay={80}>
+                <h2 className="font-serif text-[2rem] font-bold leading-[1.06] text-navy md:text-[2.75rem]">
+                  O que você leva ao trabalhar comigo.
+                </h2>
+              </Reveal>
             </div>
-            <div className="grid sm:grid-cols-2 gap-5">
-              {reasons.map((r) => (
-                <div key={r.title} className="flex gap-4 bg-white rounded-[18px] p-6 border border-[#ececec] shadow-card">
-                  <div className="shrink-0 w-11 h-11 rounded-full bg-gold/20 flex items-center justify-center text-gold font-black">✓</div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              {reasons.map((reason, index) => (
+                <SpotlightCard
+                  key={reason.title}
+                  delay={(index % 2) * 90}
+                  className="card-elevated flex gap-5 p-6"
+                >
+                  <span
+                    aria-hidden
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gold/15 font-black text-gold"
+                  >
+                    ✓
+                  </span>
                   <div>
-                    <h3 className="text-navy font-bold mb-1">{r.title}</h3>
-                    <p className="text-muted text-sm">{r.description}</p>
+                    <h3 className="mb-1 font-bold text-navy">{reason.title}</h3>
+                    <p className="text-sm text-muted">{reason.description}</p>
                   </div>
-                </div>
+                </SpotlightCard>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Depoimento pessoal */}
-        <section className="py-20 bg-white">
-          <div className="container-fw max-w-3xl">
-            <div
-              className="rounded-[32px] p-10 md:p-14 text-white shadow-heavy"
-              style={{ background: 'linear-gradient(135deg, #0f1f33, #172f4d)' }}
+        {/* Depoimento em destaque */}
+        <section className="bg-parchment texture-grain texture-grain-light relative py-20 md:py-24">
+          <div className="container-fw relative max-w-3xl">
+            <Reveal
+              variant="scale"
+              className="bg-ink texture-grain relative overflow-hidden rounded-[28px] p-10 text-white shadow-heavy md:p-14"
             >
-              <blockquote className="font-serif text-2xl md:text-3xl leading-snug mb-5">
-                “Gostaria de expressar meu mais profundo agradecimento e admiração pelo trabalho excepcional do Dr. Fausto. (...) Sou imensamente grata pelo apoio e pelos resultados alcançados graças ao seu empenho incansável e sua responsabilidade técnica em construir o meu caminho para todos!”
-              </blockquote>
-              <p className="text-slate-300 text-sm">— Camila Guimarães, Gente e Gestão, Mereo, Belo Horizonte/MG</p>
-            </div>
-
-            <div className="mt-12 text-center">
-              <Link
-                href="/contato"
-                className="inline-flex items-center justify-center min-h-[48px] px-8 rounded-full bg-gold text-gray-900 font-extrabold hover:bg-gold-light transition-colors"
+              <div aria-hidden className="texture-weave-dark absolute inset-0" />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -right-6 -top-10 font-serif text-[10rem] leading-none text-gold/10"
               >
+                &rdquo;
+              </span>
+              <blockquote className="relative mb-6 font-serif text-2xl leading-snug md:text-[1.9rem]">
+                Gostaria de expressar meu mais profundo agradecimento e admiração pelo trabalho
+                excepcional do Dr. Fausto. (…) Sou imensamente grata pelo apoio e pelos resultados
+                alcançados graças ao seu empenho incansável e sua responsabilidade técnica em
+                construir o meu caminho para todos!
+              </blockquote>
+              <p className="relative text-sm text-slate-400">
+                — Camila Guimarães, Gente e Gestão, Mereo, Belo Horizonte/MG
+              </p>
+            </Reveal>
+
+            <Reveal variant="up" delay={140} className="mt-12 text-center">
+              <Link href="/contato" className="btn-navy">
                 Vamos conversar?
+                <span aria-hidden className="arrow-slide">
+                  →
+                </span>
               </Link>
-            </div>
+            </Reveal>
           </div>
         </section>
       </main>
+
+      <BackToTop />
       <Footer data={data} locale={locale} />
     </>
   )

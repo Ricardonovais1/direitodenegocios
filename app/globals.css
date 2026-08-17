@@ -2,30 +2,637 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================================================
+   Keyframes usados por classes escritas à mão (.btn, .aurora).
+   Precisam morar aqui, fora de @layer e fora do tema do Tailwind: o Tailwind
+   só emite `theme.extend.keyframes` quando a utility `animate-*` equivalente
+   aparece no markup — e essas duas nunca aparecem.
+   ========================================================================= */
+@keyframes sheen {
+  from {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(240%) skewX(-18deg);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  33% {
+    transform: translate3d(6%, -7%, 0);
+  }
+  66% {
+    transform: translate3d(-6%, 5%, 0);
+  }
+}
+
+/* =========================================================================
+   Design tokens
+   ========================================================================= */
 @layer base {
+  :root {
+    --header-h: 76px;
+    --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Grão fino de papel — textura premium, quase imperceptível */
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 78px;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     @apply bg-offwhite text-[#1f2933] leading-relaxed font-sans;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
+  body[data-scroll-locked='true'] {
+    overflow: hidden;
+  }
+
+  /* `outline-2`/`outline-gold` sozinhos não emitem `outline-style`, então o
+     navegador cai em `outline: auto` e descarta cor e largura. O `outline`
+     abaixo é o que define `style: solid`. */
   :focus-visible {
-    @apply outline-2 outline-gold outline-offset-2 rounded;
+    @apply outline outline-2 outline-offset-2 rounded;
+    outline-color: #0f1f33; /* 16,6:1 sobre branco */
+  }
+
+  /* Sobre fundo escuro o navy some: dourado claro dá 10:1. */
+  .bg-ink :focus-visible,
+  .bg-navy-deep :focus-visible,
+  .bg-navy :focus-visible,
+  header :focus-visible,
+  footer :focus-visible {
+    outline-color: #e2c780;
   }
 
   a {
     @apply no-underline;
   }
+
+  /* Fraunces em 40–67px pede tracking negativo; sem isso os títulos ficam
+     frouxos. `balance` elimina viúvas nas manchetes. */
+  h1 {
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+  }
+
+  h2 {
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  h3 {
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgba(201, 164, 92, 0.3);
+    color: #0f1f33;
+  }
+
+  /* Números tabulares em métricas para não “dançarem” ao animar */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
 }
 
+/* =========================================================================
+   Componentes
+   ========================================================================= */
+@layer components {
+  /* --- Botões -------------------------------------------------------- */
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 min-h-[50px] px-7
+           rounded-full font-extrabold text-[0.95rem] tracking-[0.01em]
+           overflow-hidden isolate select-none;
+    transition: transform 0.45s var(--ease-silk), box-shadow 0.45s var(--ease-silk),
+      background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Brilho que atravessa o botão no hover */
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.55) 45%,
+      transparent 80%
+    );
+    transform: translateX(-120%) skewX(-18deg);
+    opacity: 0;
+  }
+
+  .btn:hover::after,
+  .btn:focus-visible::after {
+    opacity: 1;
+    animation: sheen 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  .btn-gold {
+    @apply btn text-navy-deep;
+    background-image: linear-gradient(135deg, #e2c780 0%, #c9a45c 46%, #b08b41 100%);
+    box-shadow: 0 10px 26px -12px rgba(201, 164, 92, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+
+  .btn-gold:hover,
+  .btn-gold:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px -14px rgba(201, 164, 92, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+
+  .btn-outline {
+    @apply btn text-white border border-white/45 bg-white/[0.03] backdrop-blur-sm;
+  }
+
+  .btn-outline::after {
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(226, 199, 128, 0.28) 45%,
+      transparent 80%
+    );
+  }
+
+  .btn-outline:hover,
+  .btn-outline:focus-visible {
+    @apply text-gold-light border-gold-light/80 bg-white/[0.07];
+    transform: translateY(-2px);
+  }
+
+  .btn-navy {
+    @apply btn text-white;
+    background-image: linear-gradient(135deg, #172f4d 0%, #0f1f33 100%);
+    box-shadow: 0 10px 26px -14px rgba(15, 31, 51, 0.9);
+  }
+
+  .btn-navy::after {
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(226, 199, 128, 0.35) 45%,
+      transparent 80%
+    );
+  }
+
+  .btn-navy:hover,
+  .btn-navy:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px -16px rgba(15, 31, 51, 0.95);
+  }
+
+  /* Link com sublinhado que cresce a partir da esquerda */
+  .link-underline {
+    @apply relative inline-flex items-center gap-1.5;
+  }
+
+  .link-underline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-silk);
+  }
+
+  .link-underline:hover::before,
+  .link-underline:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  /* Seta que desliza no hover do card/link */
+  .arrow-slide {
+    display: inline-block;
+    transition: transform 0.45s var(--ease-silk);
+  }
+
+  .group:hover .arrow-slide,
+  .link-underline:hover .arrow-slide {
+    transform: translateX(4px);
+  }
+
+  /* --- Eyebrow / réguas ---------------------------------------------- */
+  /* `text-gold-ink` (e não `text-gold`) porque o eyebrow é rótulo de seção —
+     texto de conteúdo em ~11px, sujeito ao mínimo de 4,5:1. */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-gold-ink uppercase tracking-[0.22em] text-[0.68rem] font-black;
+  }
+
+  /* currentColor para o filete acompanhar a cor do texto (inclusive quando a
+     variante clara é aplicada sobre fundo escuro). */
+  .eyebrow::before {
+    content: '';
+    width: 26px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, currentColor);
+    flex: none;
+  }
+
+  /* Sobre fundo escuro o gold-ink não alcança 4,5:1 — ali o tom é o claro. */
+  .bg-ink .eyebrow,
+  .bg-navy .eyebrow,
+  .bg-navy-deep .eyebrow {
+    @apply text-gold-light;
+  }
+
+  /* Em blocos centralizados, o filete só de um lado desloca o texto do eixo.
+     A versão espelhada mantém o alinhamento óptico. */
+  .eyebrow-center::after {
+    content: '';
+    width: 26px;
+    height: 1px;
+    background: linear-gradient(90deg, currentColor, transparent);
+    flex: none;
+  }
+
+  .rule-gold {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(201, 164, 92, 0.7), rgba(201, 164, 92, 0));
+  }
+
+  /* --- Cards ---------------------------------------------------------- */
+  .card-elevated {
+    @apply relative bg-white rounded-[20px] border border-black/[0.06] shadow-card overflow-hidden;
+    transition: transform 0.55s var(--ease-silk), box-shadow 0.55s var(--ease-silk),
+      border-color 0.4s ease;
+  }
+
+  .card-elevated:hover {
+    @apply border-gold/35;
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px -22px rgba(15, 31, 51, 0.35);
+  }
+
+  /* Holofote que segue o cursor (alimentado por --mx/--my) */
+  .spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    background: radial-gradient(
+      280px circle at var(--mx, 50%) var(--my, 0%),
+      rgba(201, 164, 92, 0.09),
+      transparent 62%
+    );
+  }
+
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  .spotlight-dark::before {
+    background: radial-gradient(
+      280px circle at var(--mx, 50%) var(--my, 0%),
+      rgba(226, 199, 128, 0.1),
+      transparent 62%
+    );
+  }
+
+  /* Borda superior dourada que se desenha no hover */
+  .card-topline::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #c9a45c, #e2c780, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.65s var(--ease-silk);
+  }
+
+  .card-topline:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* =========================================================================
+   Utilitários
+   ========================================================================= */
 @layer utilities {
   .container-fw {
     width: min(1120px, 92%);
     margin-inline: auto;
+  }
+
+  .container-wide {
+    width: min(1320px, 94%);
+    margin-inline: auto;
+  }
+
+  /* --- Texturas ------------------------------------------------------- */
+  /* Grão de papel. Sobre fundo escuro o `overlay` praticamente anula o efeito
+     (a base tem luminância ~0,06), então ali ele é aplicado sem blend. */
+  .texture-grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--grain);
+    opacity: 0.05;
+  }
+
+  .texture-grain-light::before {
+    opacity: 0.045;
+    mix-blend-mode: multiply;
+  }
+
+  /* Malha fina, tipo papel vergê. Um valor só — a variação de opacidade
+     caso a caso só produzia ruído. */
+  .texture-weave {
+    background-image: linear-gradient(rgba(15, 31, 51, 0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 31, 51, 0.022) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  .texture-weave-dark {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  /* Fundo escuro assinatura: profundidade + brilho dourado */
+  .bg-ink {
+    background-color: #0f1f33;
+    background-image: radial-gradient(
+        110% 80% at 88% 0%,
+        rgba(201, 164, 92, 0.22),
+        transparent 55%
+      ),
+      radial-gradient(90% 70% at 0% 100%, rgba(23, 47, 77, 0.9), transparent 60%),
+      linear-gradient(160deg, #0f1f33 0%, #091422 100%);
+  }
+
+  .bg-parchment {
+    background-color: #f7f5f0;
+    background-image: radial-gradient(
+        90% 60% at 100% 0%,
+        rgba(201, 164, 92, 0.09),
+        transparent 60%
+      ),
+      radial-gradient(70% 50% at 0% 100%, rgba(15, 31, 51, 0.045), transparent 60%);
+  }
+
+  /* Aurora dourada em movimento lento.
+     Só translada (sem `scale`), para o navegador poder reaproveitar a textura
+     borrada em vez de re-rasterizá-la a cada quadro. */
+  .aurora {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(56px);
+    pointer-events: none;
+    animation: drift 26s ease-in-out infinite;
+  }
+
+  .text-gradient-gold {
+    background-image: linear-gradient(100deg, #f2e4c4 0%, #e2c780 40%, #c9a45c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Máscara para marquees e trilhos com scroll */
+  .fade-edges {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* --- Entrada acima da dobra (CSS puro, sem esperar hidratação) ------ */
+  .enter {
+    animation: enter-up 0.62s var(--ease-silk) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  .enter-fade {
+    animation: enter-fade 0.62s ease-out both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  .enter-blur {
+    animation: enter-blur 0.72s var(--ease-silk) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  .enter-scale {
+    animation: enter-scale 0.68s var(--ease-silk) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  @keyframes enter-up {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes enter-blur {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+
+  @keyframes enter-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.965);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-left {
+    from {
+      opacity: 0;
+      transform: translateX(-24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-right {
+    from {
+      opacity: 0;
+      transform: translateX(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-down {
+    from {
+      opacity: 0;
+      transform: translateY(-18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-clip {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  /* --- Entrada abaixo da dobra (dispara ao entrar na viewport) --------
+     Usa `animation`, não `transition`. Um `transition` em atalho aqui
+     sobrescreveria as utilities `transition-*`/`duration-*` do Tailwind
+     aplicadas ao MESMO elemento (mesma especificidade, e este arquivo vem
+     depois) — os hovers dos cards deixavam de animar. */
+  .reveal {
+    opacity: 0;
+  }
+
+  .reveal.is-visible {
+    animation: enter-up 0.62s var(--ease-silk) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-down.is-visible {
+    animation-name: enter-down;
+  }
+
+  .reveal-left.is-visible {
+    animation-name: enter-left;
+  }
+
+  .reveal-right.is-visible {
+    animation-name: enter-right;
+  }
+
+  .reveal-scale.is-visible {
+    animation-name: enter-scale;
+  }
+
+  .reveal-blur.is-visible {
+    animation-name: enter-blur;
+  }
+
+  .reveal-fade.is-visible {
+    animation-name: enter-fade;
+  }
+
+  /* Revelação “de cortina”, da esquerda para a direita. */
+  .clip-reveal {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .clip-reveal.is-visible {
+    animation: enter-clip 0.9s var(--ease-silk) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+/* =========================================================================
+   Acessibilidade — respeita quem pediu menos movimento
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .clip-reveal,
+  .enter,
+  .enter-fade,
+  .enter-blur,
+  .enter-scale {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+
+  .aurora {
+    animation: none !important;
+  }
+}
+
+/* Holofote e elevação só fazem sentido com cursor de verdade */
+@media (hover: none) {
+  .spotlight::before {
+    display: none;
+  }
+
+  .card-elevated:hover {
+    transform: none;
   }
 }
