@@ -27,10 +27,10 @@ const solutionPoints = [
 ]
 
 const authorityPoints = [
-  'Fausto Sette Câmara — advogado com 15+ anos de advocacia empresarial e de negócios.',
+  'Fausto Sette Câmara — advogado com 15 anos de advocacia trabalhista, sindical e empresarial.',
   'Quase 10 anos à frente da negociação coletiva sindical do Sindinfor/MG.',
   'Autor do Manual da CCT — o livro que comenta cada cláusula e explica o racional da evolução normativa.',
-  'Formação em UFMG e pós-graduação em Direito Empresarial (Milton Campos).',
+  'Formado em Direito pela UFMG (2008) e pós-graduado em Direito Empresarial (2009).',
   'Vivência prática nas áreas trabalhista, empresarial e de TI.',
 ]
 
@@ -44,15 +44,15 @@ const benefits = [
     benefit: 'Você não só entende a norma: sabe aplicá-la na sua rotina.',
   },
   {
-    feature: 'Conciliação com o Direito do Trabalho',
+    feature: 'Conciliação com a CLT e os entendimentos jurisprudenciais dos TRT-SP',
     benefit: 'Fim da insegurança entre o que a CCT manda e o que a CLT exige.',
   },
   {
     feature: 'Manual da CCT incluso',
-    benefit: 'Um guia de consulta permanente no seu dia a dia.',
+    benefit: 'Um guia de consulta permanente para o RH, cláusula a cláusula.',
   },
   {
-    feature: 'Visão de quem negociou',
+    feature: 'Visão de quem negocia',
     benefit: 'Entenda o porquê de cada cláusula — e como ela evoluiu.',
   },
   {
@@ -148,15 +148,19 @@ export default async function CoursePage({
             </Reveal>
             <Reveal variant="up" delay={70}>
               <h2 className="mb-5 font-serif text-[2rem] font-bold leading-[1.06] text-navy md:text-[2.75rem]">
-                A sua empresa aplica a CCT todos os dias. Mas você entende o que ela realmente manda?
+                A sua empresa aplica a CCT todos os dias. Mas você entende o que ela realmente
+                regula?
               </h2>
             </Reveal>
             <Reveal variant="up" delay={130}>
               <p className="mb-8 text-lg text-muted">
                 A CCT Sindpd-SP/SeproSP é de observância obrigatória para empresas de TI. São mais de
-                10 mil empresas e quase 100 mil empregados sob suas regras — e, na prática, a maioria
-                dos operadores aplica a convenção sem conhecer a fundo a norma que executa
-                diariamente. Esse desconhecimento é o que gera:
+                10 mil empresas e quase 100 mil empregados sob suas regras —{' '}
+                <strong className="font-bold text-navy">
+                  e, na prática, a maioria dos operadores aplica a convenção sem conhecer a fundo a
+                  norma que executa diariamente
+                </strong>
+                . Esse desconhecimento é o que gera:
               </p>
             </Reveal>
 
@@ -183,6 +187,26 @@ export default async function CoursePage({
                 esse domínio que este curso entrega.
               </p>
             </Reveal>
+
+            <Reveal variant="up" delay={70} className="mt-10">
+              <div className="rounded-[20px] border border-gold/30 bg-offwhite p-7 md:flex md:items-center md:justify-between md:gap-7">
+                <div className="mb-5 md:mb-0">
+                  <p className="eyebrow mb-2">Relatório gratuito</p>
+                  <p className="font-serif text-xl font-bold leading-snug text-navy">
+                    Onde a CCT Sindpd-SP/SeproSP realmente vira processo.
+                  </p>
+                  <p className="mt-1.5 text-sm text-muted">
+                    Mapa de litigiosidade com 2.221 decisões do TRT-2, tema a tema. Sem cadastro.
+                  </p>
+                </div>
+                <a href="/relatorio-cct" className="btn-navy shrink-0">
+                  Ver o relatório
+                  <span aria-hidden className="arrow-slide">
+                    →
+                  </span>
+                </a>
+              </div>
+            </Reveal>
           </div>
         </section>
 
@@ -194,7 +218,7 @@ export default async function CoursePage({
             </Reveal>
             <Reveal variant="up" delay={70}>
               <h2 className="mb-5 font-serif text-[2rem] font-bold leading-[1.06] text-navy md:text-[2.75rem]">
-                Aprenda a aplicar a CCT cláusula por cláusula — com o “como fazer”.
+                Aprenda a aplicar a CCT cláusula por cláusula.
               </h2>
             </Reveal>
             <Reveal variant="up" delay={130}>
@@ -404,8 +428,7 @@ export default async function CoursePage({
                   'Acesso completo ao curso, cláusula por cláusula.',
                   `BÔNUS — ${course.bonus}`,
                   'Material de apoio para aplicar a norma no dia a dia.',
-                  '[PREENCHER — certificado de conclusão e carga horária]',
-                  '[PREENCHER — acesso vitalício / por X meses]',
+                  'Acesso por 12 meses à comunidade, com perguntas e respostas comentadas pelo Autor e a oportunidade de encontrar soluções para os problemas do seu RH.',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span aria-hidden className="mt-0.5 font-black text-gold-light">
@@ -424,21 +447,6 @@ export default async function CoursePage({
               <a href={CHECKOUT_URL} className="btn-gold min-h-[54px] px-10 text-base">
                 Garantir minha vaga
               </a>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* Garantia */}
-        <section className="bg-white py-20">
-          <div className="container-fw max-w-2xl text-center">
-            <Reveal variant="up">
-              <p className="eyebrow mb-4 justify-center">Garantia</p>
-            </Reveal>
-            <Reveal variant="up" delay={70}>
-              <h2 className="mb-4 font-serif text-3xl font-bold text-navy">Risco zero para você.</h2>
-            </Reveal>
-            <Reveal variant="up" delay={130}>
-              <p className="text-lg text-muted">{course.guarantee}</p>
             </Reveal>
           </div>
         </section>
@@ -490,7 +498,7 @@ export default async function CoursePage({
                 Quero dominar a CCT e eliminar passivos
               </a>
               <p className="mt-5 text-xs text-slate-400">
-                Garantia de [X] dias · Acesso imediato · Manual da CCT incluso
+                Acesso imediato · Manual da CCT incluso · Comunidade por 12 meses
               </p>
             </Reveal>
           </div>

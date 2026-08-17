@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { route: '/sobre', priority: 0.8 },
     { route: '/areas-de-atuacao', priority: 0.8 },
     { route: '/cursos', priority: 0.8 },
+    { route: '/relatorio-cct', priority: 0.8 },
     { route: '/blog', priority: 0.8 },
     { route: '/contato', priority: 0.8 },
   ]

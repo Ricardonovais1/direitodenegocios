@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getAreaIcon, ICON_STROKE } from '@/lib/area-icons'
 import type { PracticeArea } from '@/types'
 
 /**
@@ -23,21 +24,29 @@ export default function AreaMarquee({ areas }: { areas: PracticeArea[] }) {
               className="flex shrink-0 items-center gap-3 pr-3"
               aria-hidden={copy === 1 || undefined}
             >
-              {items.map((area) => (
-                <li key={`${copy}-${area._id}`}>
-                  <Link
-                    href={`/areas-de-atuacao/${area.slug}`}
-                    tabIndex={copy === 1 ? -1 : undefined}
-                    className="group/item flex items-center gap-2.5 whitespace-nowrap rounded-full
-                      border border-white/10 bg-white/[0.03] px-5 py-2 text-sm text-slate-300
-                      transition-all duration-500 ease-silk
-                      hover:border-gold/50 hover:bg-gold/10 hover:text-white"
-                  >
-                    <span className="tabular-nums text-[0.7rem] font-semibold tracking-[0.14em] text-gold/70">{area.number}</span>
-                    {area.title}
-                  </Link>
-                </li>
-              ))}
+              {items.map((area) => {
+                const Icon = getAreaIcon(area.slug)
+                return (
+                  <li key={`${copy}-${area._id}`}>
+                    <Link
+                      href={`/areas-de-atuacao/${area.slug}`}
+                      tabIndex={copy === 1 ? -1 : undefined}
+                      className="group/item flex items-center gap-2.5 whitespace-nowrap rounded-full
+                        border border-white/10 bg-white/[0.03] px-5 py-2 text-sm text-slate-300
+                        transition-all duration-500 ease-silk
+                        hover:border-gold/50 hover:bg-gold/10 hover:text-white"
+                    >
+                      <Icon
+                        aria-hidden
+                        size={16}
+                        strokeWidth={ICON_STROKE}
+                        className="shrink-0 text-gold/70 transition-colors duration-500 group-hover/item:text-gold-light"
+                      />
+                      {area.title}
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           ))}
         </div>

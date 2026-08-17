@@ -47,7 +47,6 @@ export const coursesQuery = `*[_type == "course"] | order(order asc) {
   modules,
   faqs,
   price,
-  guarantee,
   bonus
 }`
 
@@ -63,7 +62,6 @@ export const courseBySlugQuery = `*[_type == "course" && slug.current == $slug][
   modules,
   faqs,
   price,
-  guarantee,
   bonus,
   seo
 }`

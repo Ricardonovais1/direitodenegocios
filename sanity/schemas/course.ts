@@ -43,7 +43,6 @@ export default defineType({
       ],
     }),
     defineField({ name: 'price', title: 'Preço / investimento', type: 'string' }),
-    defineField({ name: 'guarantee', title: 'Garantia', type: 'text' }),
     defineField({ name: 'bonus', title: 'Bônus', type: 'text' }),
     defineField({ name: 'order', title: 'Ordem de exibição', type: 'number' }),
     defineField({

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import SpotlightCard from './motion/SpotlightCard'
+import { getAreaIcon, ICON_STROKE } from '@/lib/area-icons'
 import type { PracticeArea } from '@/types'
 
 interface AreaCardProps {
@@ -21,17 +22,21 @@ export default function AreaCard({
   headingLevel: Heading = 'h3',
 }: AreaCardProps) {
   const href = area.slug ? `/areas-de-atuacao/${area.slug}` : undefined
+  const Icon = getAreaIcon(area.slug)
 
   return (
     <SpotlightCard
       delay={delay}
       className="card-elevated card-topline group flex flex-col p-7"
     >
-      <span className="font-semibold tabular-nums text-xs tracking-[0.22em] text-gold-ink">
-        {area.number}
+      <span
+        aria-hidden
+        className="grid h-12 w-12 place-items-center rounded-full border border-gold/35 text-gold-ink transition-all duration-500 ease-silk group-hover:border-gold group-hover:bg-gold group-hover:text-navy-deep"
+      >
+        <Icon size={22} strokeWidth={ICON_STROKE} />
       </span>
 
-      <Heading className="mb-3 mt-4 font-serif text-xl font-bold leading-snug text-navy">
+      <Heading className="mb-3 mt-5 font-serif text-xl font-bold leading-snug text-navy">
         {href ? (
           <Link href={href} className="after:absolute after:inset-0 after:content-['']">
             {area.title}

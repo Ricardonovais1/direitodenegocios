@@ -134,7 +134,7 @@ export default async function PracticeAreaPage({
 
       <main id="main-content">
         <PageHero
-          eyebrow={`${area.number} · ${family?.label ?? 'Área de atuação'}`}
+          eyebrow={family?.label ?? 'Área de atuação'}
           title={area.title}
           lead={detail?.tagline ?? area.description}
           crumbs={[

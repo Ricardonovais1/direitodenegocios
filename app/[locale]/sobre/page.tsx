@@ -105,7 +105,7 @@ export default async function SobrePage({
               <span aria-hidden className="absolute -inset-3 rounded-full border border-gold/30" />
               <div className="relative h-40 w-40 overflow-hidden rounded-full border-2 border-gold/50 md:h-56 md:w-56">
                 <Image
-                  src="/images/fausto.webp"
+                  src="/images/fausto-retrato.webp"
                   alt="Retrato de Fausto Sette Câmara"
                   fill
                   sizes="224px"

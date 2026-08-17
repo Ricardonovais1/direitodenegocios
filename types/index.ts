@@ -85,7 +85,6 @@ export interface Course {
   modules?: CourseModule[]
   faqs?: CourseFaq[]
   price?: string
-  guarantee?: string
   bonus?: string
   order?: number
 }
