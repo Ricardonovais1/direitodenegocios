@@ -404,14 +404,36 @@
   }
 
   /* Aurora dourada em movimento lento.
-     Só translada (sem `scale`), para o navegador poder reaproveitar a textura
-     borrada em vez de re-rasterizá-la a cada quadro. */
+     Só translada (sem `scale`), para o navegador poder reaproveitar a camada
+     em vez de re-rasterizá-la a cada quadro.
+
+     O degradê é feito com máscara, e NÃO com `filter: blur()`. O blur obriga o
+     Chrome a rasterizar a camada em tiles enquanto a página rola; como o
+     elemento é grande e sangra para fora do `overflow: hidden` do pai, as
+     emendas dos tiles apareciam como retângulos no fundo. A máscara é só uma
+     operação de composição na GPU — mesmo visual, sem costura. */
   .aurora {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(56px);
     pointer-events: none;
+    -webkit-mask-image: radial-gradient(
+      closest-side,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.92) 26%,
+      rgba(0, 0, 0, 0.6) 52%,
+      rgba(0, 0, 0, 0.24) 74%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      closest-side,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.92) 26%,
+      rgba(0, 0, 0, 0.6) 52%,
+      rgba(0, 0, 0, 0.24) 74%,
+      transparent 100%
+    );
     animation: drift 26s ease-in-out infinite;
+    will-change: transform;
   }
 
   .text-gradient-gold {

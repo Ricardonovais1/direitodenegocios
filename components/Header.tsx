@@ -67,7 +67,10 @@ export default function Header({ name, tagline }: HeaderProps) {
   return (
     <header
       id="site-header"
-      className={`sticky top-0 z-50 border-b text-white transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-silk ${
+      /* `backdrop-filter` ficou fora da transição de propósito: animar o raio do
+         blur obriga o navegador a reamostrar o fundo a cada quadro justamente
+         enquanto a página rola. A troca de cor já dá conta da mudança de estado. */
+      className={`sticky top-0 z-50 border-b text-white transition-[background-color,border-color,box-shadow] duration-500 ease-silk ${
         scrolled || menuOpen
           ? 'border-white/10 bg-navy-dark/95 shadow-[0_10px_40px_-24px_rgba(0,0,0,0.9)] backdrop-blur-md'
           : 'border-transparent bg-navy/80 backdrop-blur-sm'
