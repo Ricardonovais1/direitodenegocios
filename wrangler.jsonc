@@ -2,6 +2,9 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
 	"name": "direitodenegocios",
+	// Fixa a conta de destino deste projeto. Assim o wrangler NUNCA deploya
+	// na conta errada, mesmo que o login global esteja em outra conta.
+	"account_id": "2682866bee427557b3bf789ff6102f3a",
 	"compatibility_date": "2026-08-20",
 	"compatibility_flags": [
 		"nodejs_compat",
