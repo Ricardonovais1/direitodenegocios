@@ -5,6 +5,10 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 const config: NextConfig = {
   images: {
+    // Cloudflare não tem o otimizador de imagens do Vercel; desativamos a
+    // otimização do next/image porque as imagens já chegam otimizadas do
+    // Sanity (urlFor com width/height/fit) ou já são WebP locais.
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.sanity.io' },
     ],
@@ -28,3 +32,5 @@ const config: NextConfig = {
 }
 
 export default withNextIntl(config)
+
+import('@opennextjs/cloudflare').then(m => m.initOpenNextCloudflareForDev());

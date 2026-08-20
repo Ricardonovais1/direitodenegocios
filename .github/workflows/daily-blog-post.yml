@@ -25,3 +25,14 @@ jobs:
           SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
           FAL_KEY: ${{ secrets.FAL_KEY }}
         run: node scripts/publish-daily-post.mjs
+
+      # Opção A — o site é estático, então o post só aparece após um rebuild.
+      # Dispara o Deploy Hook do Cloudflare (gerado em Workers & Pages →
+      # Settings → Builds & deployments). Guarde a URL em:
+      #   GitHub → Settings → Secrets and variables → Actions
+      #   como CLOUDFLARE_DEPLOY_HOOK.
+      # Rebuilda mesmo nos dias em que a fila está vazia (o script sai com 0
+      # nesse caso) — é barato e também publica edições manuais feitas no Sanity.
+      - name: Trigger Cloudflare rebuild (deploy hook)
+        if: secrets.CLOUDFLARE_DEPLOY_HOOK != ''
+        run: curl --fail --silent --show-error --request POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
